@@ -1,0 +1,48 @@
+<div class="space-y-4">
+  <div *ngIf="tasks$ | async as tasks; else noTasks">
+    <div *ngFor="let task of tasks" class="bg-white p-4 rounded-lg shadow-md">
+      <div class="flex justify-between items-start">
+        <div class="flex-1">
+          <h3 class="text-lg font-semibold" [class.line-through]="task.status === 'completed'">
+            {{ task.title }}
+          </h3>
+          <p class="text-gray-600 mt-1">{{ task.description }}</p>
+          <div class="mt-2 flex items-center space-x-4">
+            <span class="text-sm text-gray-500">Due: {{ task.dueDate | date }}</span>
+            <span class="px-2 py-1 text-xs rounded" [ngClass]="getPriorityClass(task.priority)">
+              Priority {{ task.priority }}
+            </span>
+            <span class="px-2 py-1 text-xs rounded" [ngClass]="task.status === 'completed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'">
+              {{ task.status }}
+            </span>
+          </div>
+        </div>
+        <div class="flex space-x-2 ml-4">
+          <button
+            (click)="toggleStatus(task.id)"
+            class="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            Toggle
+          </button>
+          <button
+            (click)="edit.emit(task)"
+            class="px-3 py-1 text-sm bg-yellow-500 text-white rounded hover:bg-yellow-600"
+          >
+            Edit
+          </button>
+          <button
+            (click)="deleteTask(task.id)"
+            class="px-3 py-1 text-sm bg-red-500 text-white rounded hover:bg-red-600"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #noTasks>
+    <div class="text-center py-8">
+      <p class="text-gray-500">No tasks yet. Create your first task!</p>
+    </div>
+  </ng-template>
+</div>
